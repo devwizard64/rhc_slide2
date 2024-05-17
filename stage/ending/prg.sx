@@ -1,0 +1,23 @@
+#include <sm64/prglang.h>
+
+.data
+
+.globl p_ending
+p_ending:
+	pStageInit()
+	pStageStart()
+		pSceneStart(1, s_ending)
+		pSceneEnd()
+	pStageEnd()
+	pSleep(30)
+	pCallback(ending_proc, 0)
+	pSceneOpen(1)
+	pWipe(WIPE_FADE_IN, 30*2, 0xFF, 0xFF, 0xFF)
+	pSleep(30*2)
+	pBgmPlay(NA_BGM_PUYOSUNSET)
+	pSleep(30*8)
+	pProcess(ending_proc, 1)
+	pSceneClose(1)
+	pStageExit()
+	pSleep(2)
+	pExit()

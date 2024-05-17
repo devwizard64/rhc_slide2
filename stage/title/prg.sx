@@ -1,0 +1,48 @@
+#include <sm64/prglang.h>
+
+.data
+
+.globl p_logo
+p_logo:
+	pStageInit()
+	pLoadPres(SEG_STAGE_GFX, _TitleLogoSegmentRomStart, _TitleLogoSegmentRomEnd)
+	pStageStart()
+		pSceneStart(1, s_logo)
+		pSceneEnd()
+	pStageEnd()
+	pSceneOpen(1)
+	pCallback(title_logo, 0)
+	pSleep(30*2+15)
+	pWipe(WIPE_FADE_OUT, 16, 0x00, 0x00, 0x00)
+	pSleep(16)
+	pSceneClose(1)
+	pStageExit()
+	pSleep(2)
+	pJumpIf(EQ, EXIT_DEBUG, p_debug)
+	pChain(SEG_GAME, _GameSegmentRomStart, _GameSegmentRomEnd, p_game)
+
+.globl p_debug
+p_debug:
+	pStageInit()
+	pStageStart()
+		pSceneStart(1, s_debug)
+		pSceneEnd()
+	pStageEnd()
+	pSceneOpen(1)
+	pBgmPlay(NA_BGM_TITLE)
+	pWipe(WIPE_FADE_IN, 16, 0xFF, 0xFF, 0xFF)
+	pSleep(16)
+	pProcess(title_debug, 0)
+	pAudFadeout(NA_TIME(24))
+	pJumpIf(EQ, -1, 1f)
+	pWipe(WIPE_FADE_OUT, 16, 0xFF, 0xFF, 0xFF)
+	pSleep(16)
+	pStageExit()
+	pSleep(2)
+	pChain(SEG_GAME, _GameSegmentRomStart, _GameSegmentRomEnd, p_game)
+1:
+	pWipe(WIPE_FADE_OUT, 16, 0x00, 0x00, 0x00)
+	pSleep(16)
+	pStageExit()
+	pSleep(2)
+	pJump(p_logo)

@@ -1,0 +1,53 @@
+#!/usr/bin/env python3
+
+import sys
+
+imptab = (
+	("KERNEL32", (
+		"CloseHandle",
+		"CreateFileA",
+		"CreateThread",
+		"ExpandEnvironmentStringsA",
+		"GetLocalTime",
+		"LoadLibraryA",
+		"WriteFile",
+	)),
+	("USER32", (
+		# "DrawMenuBar",
+		"FindWindowA",
+		# "GetMenu",
+		# "GetMenuItemCount",
+		"GetSystemMetrics",
+		"GetWindowRect",
+		# "InsertMenuA",
+		"MessageBoxA",
+		# "RemoveMenu",
+		"SetLayeredWindowAttributes",
+		"SetWindowLongPtrA",
+		"SetWindowPos",
+		# "SetWindowTextA",
+	)),
+)
+
+if len(sys.argv) != 2:
+	sys.stderr.write("usage: %s <option>\n")
+	sys.exit(1)
+if sys.argv[1] == "-i":
+	strtab = []
+	print(".globl procinfo\nprocinfo:")
+	for dll, imp in imptab:
+		print("\t.short %d,%s-procinfo" % (len(imp), dll))
+		strtab.append((dll, dll+".dll"))
+		for proc in imp:
+			print("\t.short %s-procinfo" % proc)
+			strtab.append((proc, proc))
+	print("\t.short 0\n")
+	for s in strtab: print("%s: .asciz \"%s\"" % s)
+elif sys.argv[1] == "-p":
+	print(".globl proclist\nproclist:")
+	for dll, imp in imptab:
+		for proc in imp:
+			print(".globl __imp_%s; __imp_%s: .space 8" % (proc, proc))
+else:
+	sys.stderr.write("error: invalid option\n")
+	sys.exit(1)

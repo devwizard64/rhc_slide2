@@ -1,0 +1,4 @@
+.globl p_shape_1i
+p_shape_1i:
+	pShapeScript(S_KEY, s_key)
+	pReturn()

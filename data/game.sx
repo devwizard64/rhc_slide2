@@ -1,0 +1,98 @@
+#include <sm64/prglang.h>
+
+.data
+
+.globl p_game
+p_game:
+	pLoadPres(SEG_PLAYER_GFX, _PlayerGfxSegmentRomStart, _PlayerGfxSegmentRomEnd)
+	pLoadPres(SEG_GLOBAL_GFX, _GlobalGfxSegmentRomStart, _GlobalGfxSegmentRomEnd)
+	pLoadData(SEG_PLAYER_SHP, _PlayerShpSegmentRomStart, _PlayerShpSegmentRomEnd)
+	pLoadData(SEG_GLOBAL_SHP, _GlobalShpSegmentRomStart, _GlobalShpSegmentRomEnd)
+	pLoadData(SEG_OBJECT, _ObjectSegmentRomStart, _ObjectSegmentRomEnd)
+	pStageStart()
+		pShapeScript(S_MARIO, s_mario)
+		pShapeScript(S_DUST, s_dust)
+		pShapeScript(S_SPARKLE, s_sparkle)
+		pShapeScript(S_BUBBLE_A, s_bubble_a)
+		pShapeScript(S_WAVE, s_wave)
+		pShapeScript(S_RIPPLE_STOP, s_ripple_stop)
+		pShapeScript(S_SPLASH, s_splash)
+		pShapeScript(S_RIPPLE_MOVE, s_ripple_move)
+		pShapeScript(S_COIN, s_coin)
+		pShapeScript(S_POWERSTAR, s_powerstar)
+		pShapeScript(S_SHADESTAR, s_shadestar)
+		pShapeScript(S_SIGNPOST, s_signpost)
+		pShapeGfx(S_DROPLET, gfx_droplet, LAYER_TEX_EDGE)
+		pShapeScript(S_FLAME, s_flame)
+		pShapeScript(S_BLUEFLAME, s_blueflame)
+		pShapeScript(S_SMOKE, s_smoke)
+		pShapeScript(S_LEAF, s_leaf)
+		pShapeScript(S_BUBBLE_B, s_bubble_b)
+		pShapeScript(S_FISH, s_fish)
+		pShapeScript(S_FISH_SHADOW, s_fish_shadow)
+		pShapeScript(S_GLOW, s_glow)
+		pShapeGfx(S_SAND, gfx_sand, LAYER_TEX_EDGE)
+		pShapeScript(S_BUTTERFLY, s_butterfly)
+		pShapeScript(S_SMOKE2, s_smoke)
+		pShapeGfx(S_STONE, gfx_stone, LAYER_TEX_EDGE)
+		pShapeScript(S_WHITEPUFF, s_whitepuff)
+		pShapeScript(S_BLACKPUFF, s_blackpuff)
+		pShapeGfx(S_SNOW, gfx_snow, LAYER_TEX_EDGE)
+		pShapeScript(S_SNOWBALL, s_snowball)
+		pShapeScript(S_COIN_NOSHADOW, s_coin_noshadow)
+		pShapeScript(S_BLUECOIN, s_bluecoin)
+		pShapeScript(S_BLUECOIN_NOSHADOW, s_bluecoin_noshadow)
+		pShapeScript(S_WINGCAP_E, s_wingcap_e)
+		pShapeScript(S_CAP_E, s_cap_e)
+		pShapeScript(S_WINGCAP_S, s_wingcap_s)
+		pShapeScript(S_CAP_S, s_cap_s)
+		pShapeScript(S_CAP_S, s_cap_s)
+		pShapeScript(S_DOORKEY, s_doorkey)
+		pShapeScript(S_BOWSERKEY, s_bowserkey)
+		pShapeScript(S_FLAME_SHADOW, s_flame_shadow)
+		pShapeScript(S_1UP, s_1up)
+		pShapeScript(S_REDCOIN, s_redcoin)
+		pShapeScript(S_REDCOIN_NOSHADOW, s_redcoin_noshadow)
+		pShapeScript(S_NUMBER, s_number)
+		pShapeScript(S_EXPLOSION, s_explosion)
+		pShapeScript(S_SHARD, s_shard)
+		pShapeScript(S_STAR, s_star)
+	pStageEnd()
+	pCallback(game_initialize, 0)
+	pRepeat()
+		pCallback(game_checkselect, 0)
+		pJumpIf(NE, 0, .error)
+		pCall(p_stage)
+		pSleep(1)
+	pUntil(LT, STAGE_NULL)
+	pJumpIf(EQ, EXIT_DEBUG, .case_m9)
+	pChain(SEG_MENU_DATA, _TitleSegmentRomStart, _TitleSegmentRomEnd, p_logo)
+.case_m9:
+	pChain(SEG_MENU_DATA, _TitleSegmentRomStart, _TitleSegmentRomEnd, p_debug)
+
+p_stage:
+	pLoad(STAGE)
+	pJumpIf(EQ, 1, .case_1)
+	pJumpIf(EQ, STAGE_ENDING, .case_25)
+	pJumpIf(EQ, STAGE_PSS, .case_27)
+	pExit()
+.case_1:
+	pExecute(SEG_STAGE_DATA, _Stage1SegmentRomStart, _Stage1SegmentRomEnd, p_stage1)
+	pReturn()
+.case_25:
+	pExecute(SEG_STAGE_DATA, _EndingSegmentRomStart, _EndingSegmentRomEnd, p_ending)
+	pReturn()
+.case_27:
+	pExecute(SEG_STAGE_DATA, _PSSSegmentRomStart, _PSSSegmentRomEnd, p_pss)
+	pReturn()
+
+.error:
+	pSleep(16)
+	pWipe(WIPE_FADE_OUT, 1, 0x00, 0x00, 0x00)
+	pCallback(game_error, 0)
+	pProcess(game_error, 1)
+	pReturn()
+
+#include "shape/3common/prg.sx"
+#include "shape/1i/prg.sx"
+#include "shape/2b/prg.sx"

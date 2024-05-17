@@ -1,0 +1,49 @@
+wave cosmic
+{
+	sound cosmicL "stm/cosmicL.aifc";
+	sound cosmicR "stm/cosmicR.aifc";
+};
+
+wave puyosunset
+{
+	sound puyosunsetL "stm/puyosunsetL.aifc";
+	sound puyosunsetR "stm/puyosunsetR.aifc";
+};
+
+bank cosmic
+{
+	date = {2024, 3, 31};
+	wave cosmic;
+	envelope env0 {2, 32767, 1, 32767, -1, 0};
+	instrument[0] =
+	{
+		release = 208;
+		envelope = env0;
+		sound = {cosmicL, C4};
+	};
+	instrument[1] =
+	{
+		release = 208;
+		envelope = env0;
+		sound = {cosmicR, C4};
+	};
+};
+
+bank puyosunset
+{
+	date = {2024, 3, 31};
+	wave puyosunset;
+	envelope env0 {2, 32767, 1, 32767, -1, 0};
+	instrument[0] =
+	{
+		release = 208;
+		envelope = env0;
+		sound = {puyosunsetL, C4};
+	};
+	instrument[1] =
+	{
+		release = 208;
+		envelope = env0;
+		sound = {puyosunsetR, C4};
+	};
+};

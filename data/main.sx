@@ -1,0 +1,21 @@
+#include <sm64/prglang.h>
+
+.data
+
+#define STAGE   STAGE_NULL
+
+.globl p_main
+p_main:
+	pSleep(2)
+	pViBlack(FALSE)
+	pCallback(game_checksave, STAGE)
+	pJumpIf(EQ, STAGE_NULL, 1f)
+	pExecute(SEG_GAME, _GameSegmentRomStart, _GameSegmentRomEnd, p_game)
+	pJump(p_main)
+1:
+#if 0
+	pExecute(SEG_MENU_DATA, _TitleSegmentRomStart, _TitleSegmentRomEnd, p_logo)
+#else
+	pExecute(SEG_MENU_DATA, _ContCheckSegmentRomStart, _ContCheckSegmentRomEnd, p_contcheck)
+#endif
+	pJump(p_main)

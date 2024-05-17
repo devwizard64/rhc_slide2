@@ -1,0 +1,22 @@
+#include <sm64/prglang.h>
+
+.data
+
+.globl p_contcheck
+p_contcheck:
+	pStageInit()
+	pLoadPres(SEG_STAGE_GFX, _ContCheckGfxSegmentRomStart, _ContCheckGfxSegmentRomEnd)
+	pStageStart()
+		pSceneStart(1, s_contcheck)
+		pSceneEnd()
+	pStageEnd()
+	pSceneOpen(1)
+	pCallback(contcheck_proc, 0)
+	pProcess(contcheck_proc, 1)
+	pWipe(WIPE_FADE_OUT, 16, 0x00, 0x00, 0x00)
+	pSleep(30)
+	pSceneClose(2)
+	pWipe(WIPE_FADE_IN, 1, 0x00, 0x00, 0x00)
+	pStageExit()
+	pSleep(2)
+	pChain(SEG_MENU_DATA, _TitleSegmentRomStart, _TitleSegmentRomEnd, p_logo)

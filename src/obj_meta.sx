@@ -1,0 +1,11 @@
+#include <sm64/objlang.h>
+
+#define SCRIPT
+
+.data
+
+#include "meta/slider.c"
+#include "meta/key.c"
+#include "meta/chaser.c"
+#include "meta/chest.c"
+#include "meta/checkpoint.c"

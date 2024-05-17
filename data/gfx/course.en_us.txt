@@ -1,0 +1,83 @@
+$name: course_name
+$lang: en.m
+
+$$ 1
+$tbl:
+
+$$ 2
+$tbl:
+
+$$ 3
+$tbl:
+
+$$ 4
+$tbl:
+
+$$ 5
+$tbl:
+
+$$ 6
+$tbl:
+
+$$ 7
+$tbl:
+
+$$ 8
+$tbl:
+
+$$ 9
+$tbl:
+
+$$ 10
+$tbl:
+
+$$ 11
+$tbl:
+
+$$ 12
+$tbl:
+
+$$ 13
+$tbl:
+
+$$ 14
+$tbl:
+
+$$ 15
+$tbl:
+
+$$ 16
+$tbl:
+   RAINBOW ROAD
+
+$$ 17
+$tbl:
+
+$$ 18
+$tbl:
+
+$$ 19
+$tbl:
+   THE PRINCESS'S SECRET SLIDE
+
+$$ 20
+$tbl:
+
+$$ 21
+$tbl:
+
+$$ 22
+$tbl:
+
+$$ 23
+$tbl:
+
+$$ 24
+$tbl:
+
+$$ 25
+$tbl:
+
+$$ 26
+$tbl:
+   CASTLE SECRET STARS

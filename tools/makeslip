@@ -1,0 +1,69 @@
+#!/usr/bin/env python3
+
+import sys
+import math
+
+back = (
+	(593, 4987, 532),
+	(1153, 4987, 532),
+)
+fore = (
+	(588, 4987, 407),
+	(1148, 4987, 397),
+)
+
+def getbg(code):
+	i, n = bg[code]
+	return [tuple([int(x) for x in data[i]]) for i in range(i, i+n)]
+
+def findline(line):
+	return [i for i, t in enumerate(tset) if line.issubset(t)]
+
+def getpoint(line):
+	v = [vtx[i] for i in line]
+	return ((v[0][0]+v[1][0])/2, (v[0][2]+v[1][2])/2)
+
+if len(sys.argv) != 2:
+	sys.stderr.write("usage: %s <map>\n" % sys.argv[0])
+	sys.exit(1)
+fn = sys.argv[1]
+with open(fn, "r") as f: data = [line[:-2].split(", ") for line in f]
+bg = {}
+i = 0
+while i < len(data):
+	line = data[i]
+	i += 1
+	code = line[0]
+	if code == "MAP_BGEND": break
+	n = int(line[1])
+	bg[code] = (i, n)
+	i += n
+vtx = getbg("MAP_VTX")
+tri = getbg("4")
+tset = [set(t) for t in tri]
+back = {vtx.index(v) for v in back}
+fore = {vtx.index(v) for v in fore}
+tb = set(findline(back))
+tf = set(findline(fore))
+t = set([i for i in set(tb)|set(tf) if tset[i].issubset(back|fore)])
+tb &= t
+tf &= t
+assert len(tb) == 1 and len(tf) == 1
+quad = start = tuple(tb) + tuple(tf)
+while True:
+	f = getpoint(fore)
+	b = getpoint(back)
+	ang = "%d" % int(round(math.atan2(f[0]-b[0], f[1]-b[1])*0x8000/math.pi))
+	for i in quad: data[bg["4"][0]+i].append(ang)
+	tb = [i for i, t in enumerate(tset) if i != quad[1] and fore.issubset(t)]
+	tb, = tb
+	tf = [
+		i for i, t in enumerate(tset) if i != quad[1] and len(tset[tb]|t) == 4
+	]
+	tf, = tf
+	back = fore
+	fore = (tset[tb]|tset[tf]) - back
+	quad = (tb, tf)
+	if quad == start: break
+with open(sys.argv[1], "w") as f:
+	for line in data: f.write(", ".join(line)+",\n")

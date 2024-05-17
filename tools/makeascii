@@ -1,0 +1,13 @@
+#!/usr/bin/env python3
+
+import sys
+
+if len(sys.argv) != 2:
+	sys.stderr.write("usage: %s <input>\n")
+	sys.exit(1)
+with open(sys.argv[1], "rb") as f:
+	for line in f:
+		line = line.replace(B"\r", B"")
+		line = line.replace(B"\n", B"")
+		line += B"\r\n"
+		print("".join(["%d," % (c - (c << 1 & 0x100)) for c in line]))

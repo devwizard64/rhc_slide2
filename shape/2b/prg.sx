@@ -1,0 +1,5 @@
+.globl p_shape_2b
+p_shape_2b:
+	pShapeScript(S_CHEST, s_chest)
+	pShapeScript(S_CHESTLID, s_chestlid)
+	pReturn()
